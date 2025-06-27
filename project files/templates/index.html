@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Butterfly Classifier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating Butterflies Animation */
+        .butterfly {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .butterfly::before,
+        .butterfly::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            border-radius: 50% 10px 50% 10px;
+            animation: flutter 2s ease-in-out infinite alternate;
+        }
+
+        .butterfly::before {
+            top: 0;
+            left: 0;
+            transform-origin: bottom right;
+        }
+
+        .butterfly::after {
+            top: 0;
+            right: 0;
+            transform-origin: bottom left;
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+        }
+
+        @keyframes flutter {
+            0% { transform: rotateY(0deg) rotateX(0deg); }
+            100% { transform: rotateY(20deg) rotateX(10deg); }
+        }
+
+        .butterfly:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation: float1 8s ease-in-out infinite;
+        }
+
+        .butterfly:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            animation: float2 10s ease-in-out infinite;
+        }
+
+        .butterfly:nth-child(3) {
+            top: 80%;
+            left: 20%;
+            animation: float3 12s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -20px) rotate(10deg); }
+            66% { transform: translate(-20px, -40px) rotate(-5deg); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-40px, -30px) rotate(15deg); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -15px) rotate(-10deg); }
+            75% { transform: translate(-30px, -25px) rotate(8deg); }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Home Page Styles */
+        .home-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            color: #2d3436;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #636e72;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .upload-form {
+            margin-top: 30px;
+        }
+
+        .file-input-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 40px 20px;
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f8f9ff, #e8f4fd);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-input-label:hover {
+            border-color: #764ba2;
+            background: linear-gradient(135deg, #fff, #f0f8ff);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-input-label::before {
+            content: '📸';
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .file-input-text {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Result Page Styles */
+        .result-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .result-title {
+            color: #2d3436;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .species-name {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .confidence {
+            color: #636e72;
+            font-size: 1.1rem;
+            margin: 15px 0;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(116, 185, 255, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .home-content, .result-content {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .logo {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Butterflies -->
+    <div class="butterfly"></div>
+    <div class="butterfly"></div>
+    <div class="butterfly"></div>
+
+    <div class="container">
+        <!-- Home Page -->
+        <div class="home-content" id="homePage">
+            <div class="logo">🦋</div>
+            <h1>Butterfly Classifier</h1>
+            <p class="subtitle">
+                Discover the beauty of nature! Upload an image of a butterfly and let our AI identify the species for you.
+            </p>
+            
+            <form class="upload-form" id="uploadForm" action="/predict" method="post" enctype="multipart/form-data">
+                <div class="file-input-container">
+                    <input type="file" id="butterflyImage" name="image" class="file-input" accept="image/*" required>
+                    <label for="butterflyImage" class="file-input-label">
+                        <div class="file-input-text">Click to upload butterfly image</div>
+                        <small style="color: #636e72; margin-top: 10px; display: block;">JPG, PNG, or GIF (max 10MB)</small>
+                    </label>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    🔍 Identify Butterfly
+                </button>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing your butterfly image...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // File input handling
+        const fileInput = document.getElementById('butterflyImage');
+        const fileLabel = document.querySelector('.file-input-label');
+        
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const fileName = e.target.files[0].name;
+                fileLabel.querySelector('.file-input-text').textContent = `Selected: ${fileName}`;
+                fileLabel.style.borderColor = '#00b894';
+                fileLabel.style.background = 'linear-gradient(135deg, #e8f8f5, #d1f2eb)';
+            }
+        });
+
+        // Form submission handling
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            
+            // Note: In a real implementation, this would be handled by your backend
+            // For demo purposes, we'll simulate the result page
+            setTimeout(() => {
+                showResultPage();
+            }, 2000);
+        });
+
+        function showResultPage() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('resultPage').style.display = 'block';
+        }
+
+        function goBack() {
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('homePage').style.display = 'block';
+            
+            // Reset form
+            document.getElementById('uploadForm').reset();
+            fileLabel.querySelector('.file-input-text').textContent = 'Click to upload butterfly image';
+            fileLabel.style.borderColor = '#667eea';
+            fileLabel.style.background = 'linear-gradient(135deg, #f8f9ff, #e8f4fd)';
+        }
+
+        // Check if we're on the result page (for /predict endpoint)
+        if (window.location.pathname === '/predict') {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('resultPage').style.display = 'block';
+            
+            // You can update these values with actual prediction results from your backend
+            // document.getElementById('speciesName').textContent = 'Actual Species Name';
+            // document.getElementById('confidence').textContent = 'Confidence: XX.X%';
+        }
+
+        // Add more floating butterflies dynamically
+        function createButterfly() {
+            const butterfly = document.createElement('div');
+            butterfly.className = 'butterfly';
+            butterfly.style.top = Math.random() * 100 + '%';
+            butterfly.style.left = Math.random() * 100 + '%';
+            butterfly.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(butterfly);
+            
+            setTimeout(() => {
+                butterfly.remove();
+            }, 15000);
+        }
+
+        // Create new butterflies periodically
+        setInterval(createButterfly, 8000);
+    </script>
+</body>
+</html>
