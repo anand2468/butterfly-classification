@@ -5,7 +5,7 @@ import numpy as np
 import json
 
 
-model = load_model('vgg16_butterfly_model.keras')
+model = load_model('./vgg16_butterfly_model.keras')
 
 # Define preprocessing (adjust to your model's expected input)
 def preprocess_image(image, target_size=(224, 224)):
@@ -46,9 +46,8 @@ def predict():
         image = Image.open(file.stream).convert('RGB')
         img = preprocess_image(image)
         prediction = model.predict(img)
-        prediction_index = np.argmax(prediction, axis=1)  # Get the class index
+        prediction_index = np.argmax(prediction, axis=1) 
 
-        # Convert to list for JSON response
         data =  {'label': index_to_label[prediction_index[0]], 'confidence': float(prediction[0][prediction_index[0]])* 100}
         if data['confidence'] < 65:
             data['label'] = 'Unknown or no butterfly detected'

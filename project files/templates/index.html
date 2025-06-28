@@ -322,13 +322,11 @@
     </style>
 </head>
 <body>
-    <!-- Floating Butterflies -->
     <div class="butterfly"></div>
     <div class="butterfly"></div>
     <div class="butterfly"></div>
 
     <div class="container">
-        <!-- Home Page -->
         <div class="home-content" id="homePage">
             <div class="logo">🦋</div>
             <h1>Butterfly Classifier</h1>
@@ -376,8 +374,6 @@
             document.getElementById('homePage').style.display = 'none';
             document.getElementById('loading').style.display = 'block';
             
-            // Note: In a real implementation, this would be handled by your backend
-            // For demo purposes, we'll simulate the result page
             setTimeout(() => {
                 showResultPage();
             }, 2000);
@@ -388,26 +384,8 @@
             document.getElementById('resultPage').style.display = 'block';
         }
 
-        function goBack() {
-            document.getElementById('resultPage').style.display = 'none';
-            document.getElementById('homePage').style.display = 'block';
-            
-            // Reset form
-            document.getElementById('uploadForm').reset();
-            fileLabel.querySelector('.file-input-text').textContent = 'Click to upload butterfly image';
-            fileLabel.style.borderColor = '#667eea';
-            fileLabel.style.background = 'linear-gradient(135deg, #f8f9ff, #e8f4fd)';
-        }
 
-        // Check if we're on the result page (for /predict endpoint)
-        if (window.location.pathname === '/predict') {
-            document.getElementById('homePage').style.display = 'none';
-            document.getElementById('resultPage').style.display = 'block';
-            
-            // You can update these values with actual prediction results from your backend
-            // document.getElementById('speciesName').textContent = 'Actual Species Name';
-            // document.getElementById('confidence').textContent = 'Confidence: XX.X%';
-        }
+
 
         // Add more floating butterflies dynamically
         function createButterfly() {
@@ -420,11 +398,11 @@
             
             setTimeout(() => {
                 butterfly.remove();
-            }, 15000);
+            }, 7000);
         }
 
         // Create new butterflies periodically
-        setInterval(createButterfly, 8000);
+        setInterval(createButterfly, 4000);
     </script>
 </body>
 </html>

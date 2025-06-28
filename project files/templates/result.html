@@ -242,45 +242,12 @@
         // File input handling
         const fileInput = document.getElementById('butterflyImage');
         const fileLabel = document.querySelector('.file-input-label');
-        
-        fileInput.addEventListener('change', function(e) {
-            if (e.target.files.length > 0) {
-                const fileName = e.target.files[0].name;
-                fileLabel.querySelector('.file-input-text').textContent = `Selected: ${fileName}`;
-                fileLabel.style.borderColor = '#00b894';
-                fileLabel.style.background = 'linear-gradient(135deg, #e8f8f5, #d1f2eb)';
-            }
-        });
 
-        // Form submission handling
-        document.getElementById('uploadForm').addEventListener('submit', function(e) {
-            document.getElementById('homePage').style.display = 'none';
-            document.getElementById('loading').style.display = 'block';
-            
-            // Note: In a real implementation, this would be handled by your backend
-            // For demo purposes, we'll simulate the result page
-            setTimeout(() => {
-                showResultPage();
-            }, 2000);
-        });
 
-        function showResultPage() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('resultPage').style.display = 'block';
-        }
+
 
         function goBack() {
             window.location.href = '/';
-        }
-
-        // Check if we're on the result page (for /predict endpoint)
-        if (window.location.pathname === '/predict') {
-            document.getElementById('homePage').style.display = 'none';
-            document.getElementById('resultPage').style.display = 'block';
-            
-            // You can update these values with actual prediction results from your backend
-            // document.getElementById('speciesName').textContent = 'Actual Species Name';
-            // document.getElementById('confidence').textContent = 'Confidence: XX.X%';
         }
 
         // Add more floating butterflies dynamically
